@@ -87,11 +87,26 @@ app.get('/api/twitter/recuperation', function(req, res){
 			  // Get the documents collection
 			  var collection = db.collection('tweets');
 			  // Insert some documents
-			  collection.insertMany([
-			    tweets
-			  ], function(err, result) {
+        /*
+        collection.insertMany([
+          tweets
+          //tweets.statuses
+        ],
+        */
+			  collection.insertMany(
+          tweets.statuses
+			  , function(err, result) {
 			    callback(result);
 			  });
+
+        /*for(tweet in tweets.statuses){
+          console.log(tweet);
+        }*/
+        console.log('---------------------------------------------------');
+        console.log(tweets.statuses);
+        /*tweets.forEach(function(tweet){
+          console.log(tweet);
+        });*/
 			}
 
 			var url = 'mongodb://localhost:27017/projet-nosql';
@@ -107,7 +122,7 @@ app.get('/api/twitter/recuperation', function(req, res){
       const nombreTweet = tweets.search_metadata.count;
       const lastId = tweets.statuses[0].id;
       //var idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
-      while(i < 1500){
+    /*  while(i < 1500){
 
         const newParams = {q: 'fillon', lang:"fr", count:"100", result_type: "popular", since_id: lastId}
         const newResult = searchAndAddTweet(newParams);
@@ -118,7 +133,7 @@ app.get('/api/twitter/recuperation', function(req, res){
         console.log(lastId);
         //console.log("CODE 111111111111111111111 i : " . newResult.id);
 
-      }
+      }*/
 
 
       //recuperation de l'id de fin
