@@ -36,9 +36,49 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
+function searchAndAddTweet(params){
+  client.get('search/tweets', params, function(error, tweets, response) {
+	  if (!error) {
+	    console.log(tweets);
+
+			var insertDocuments = function(db, callback) {
+			  // Get the documents collection
+			  var collection = db.collection('tweets');
+			  // Insert some documents
+			  collection.insertMany([
+			    tweets
+			  ], function(err, result) {
+			    callback(result);
+			  });
+			}
+
+			var url = 'mongodb://localhost:27017/projet-nosql';
+			// Use connect method to connect to the server
+			MongoClient.connect(url, function(err, db) {
+			  insertDocuments(db, function() {
+          console.log("Nouvelle insertion réalisé");
+			    db.close();
+			  });
+			});
+
+      const nombreTweet = tweets.search_metadata.count;
+      const lastId = tweets.statuses[0].id;
+      const obj = {
+        nbTweet: nombreTweet,
+        id: lastId
+      };
+
+      return obj;
+
+	  } else{
+			console.log(error);
+		}
+	});
+}
+
 app.get('/api/twitter/recuperation', function(req, res){
 	console.log("recherche de tweet...");
-	const params = {q: 'presidentiel', lang:"fr", count:"100", result_type: "popular"};
+	const params = {q: 'fillon', lang:"fr", count:"100", result_type: "popular"};
 	client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
 	    console.log(tweets);
@@ -62,6 +102,35 @@ app.get('/api/twitter/recuperation', function(req, res){
 			    db.close();
 			  });
 			});
+
+      var i = tweets.search_metadata.count;
+      const nombreTweet = tweets.search_metadata.count;
+      const lastId = tweets.statuses[0].id;
+      //var idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
+      while(i < 1500){
+
+        const newParams = {q: 'fillon', lang:"fr", count:"100", result_type: "popular", since_id: lastId}
+        const newResult = searchAndAddTweet(newParams);
+
+        i = i + 100;
+        //i = i + newResult.nbTweet;
+
+        console.log(lastId);
+        //console.log("CODE 111111111111111111111 i : " . newResult.id);
+
+      }
+
+
+      //recuperation de l'id de fin
+
+      //console.log("max result : " + idFinal);
+
+      /*const nombreTweet = tweets.search_metadata.count;
+      const lastId = tweets.statuses[0].id;
+      console.log('--------------------RECUP ID--------------------')
+      console.log(lastId);
+      console.log();
+      console.log('identifiant tableau dernier tweet : ' + nombreTweet);*/
 
 	  } else{
 			console.log(error);
