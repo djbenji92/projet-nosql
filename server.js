@@ -32,7 +32,7 @@ const client = new Twitter({
 
 
 app.get('/', function (req, res) {
-	console.log(db);
+	//console.log(db);
 	res.sendFile(__dirname + '/index.html');
 });
 
