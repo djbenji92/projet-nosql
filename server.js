@@ -12,13 +12,12 @@ const MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 
 // Connection URL
-const url = 'mongodb://localhost:27017/projet-nosql';
+const url = 'mongodb://localhost:27017/projet-nosql2';
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
   console.log("Connected successfully to server");
-
   db.close();
 });
 
@@ -39,7 +38,7 @@ app.get('/', function (req, res) {
 
 app.get('/api/twitter/recuperation', function(req, res){
 	console.log("recherche de tweet...");
-	const params = {q: 'trump', lang:"us", count:"5", result_type: "popular"};
+	const params = {q: 'presidentiel', lang:"fr", count:"100", result_type: "popular"};
 	client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
 	    console.log(tweets);
