@@ -1,0 +1,20 @@
+{
+  "name": "projet-no-sql",
+  "version": "1.0.0",
+  "description": "Projet ESGI : NoSQL : Récupération de tweet, datavisualisation",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ESGI",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "express": "^4.15.2",
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.3",
+    "mpromise": "^0.5.5",
+    "promise": "^7.1.1",
+    "twitter": "^1.7.0"
+  }
+}
