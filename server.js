@@ -99,11 +99,13 @@ app.get('/api/twitter/recuperation', function(req, res){
 			    callback(result);
 			  });
 
+        //var jsonparser = JSON.parse(tweets);
+
         /*for(tweet in tweets.statuses){
           console.log(tweet);
         }*/
-        console.log('---------------------------------------------------');
-        console.log(tweets.statuses);
+        /*console.log('---------------------------------------------------');
+        console.log(tweets.statuses);*/
         /*tweets.forEach(function(tweet){
           console.log(tweet);
         });*/
@@ -113,15 +115,19 @@ app.get('/api/twitter/recuperation', function(req, res){
 			// Use connect method to connect to the server
 			MongoClient.connect(url, function(err, db) {
 			  console.log("Connected successfully to server");
+        console.log("nb tweets : " + tweets.statuses.length );
 			  insertDocuments(db, function() {
 			    db.close();
 			  });
 			});
 
       var i = tweets.search_metadata.count;
-      const nombreTweet = tweets.search_metadata.count;
+      //const nombreTweet = tweets.search_metadata.count;
       const lastId = tweets.statuses[0].id;
-      //var idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
+      //console.log(nombreTweet);
+
+
+      //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
     /*  while(i < 1500){
 
         const newParams = {q: 'fillon', lang:"fr", count:"100", result_type: "popular", since_id: lastId}
