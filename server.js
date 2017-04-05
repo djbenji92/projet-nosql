@@ -179,6 +179,53 @@ app.get('/api/twitter/recuperation', function(req, res){
 	res.send('page de recuperation de tweet');
 });
 
+app.get('/api/twitter/popularite', function(req, res){
+
+  var countMacron = 0;
+
+  var findDocuments = function(db, callback) {
+    // Get the documents collection
+    var collection = db.collection('tweets');
+    // Find some documents
+    var regex = ".*macron";
+
+    collection.find({"text": {$regex:".*Macron"}}).count(function(err, count) {
+        console.log(count);
+        callback(count);
+        countMacron = count;
+      })
+
+  }
+
+  var url = 'mongodb://localhost:27017/projet-nosql';
+  // Use connect method to connect to the server
+  //var f1 = new Promise(function(resolve, reject){
+
+  //});
+  MongoClient.connect(url, function(err, db) {
+    console.log("Connected à MongoDB - Recherche de tweet");
+    findDocuments(db, function(res) {
+      db.close();
+      countMacron = res;
+      console.log(res);
+    });
+  })
+  /*.then(
+    verifData(){
+      console.log("ok");
+    }, function(err){
+      console.log("nok");
+    }
+  );
+
+  function verifData(){
+    console.log(countMacron);
+  }*/
+
+
+  res.send('Recherche de tweet');
+});
+
 
 
 const server = app.listen(port, hostname, () => {
