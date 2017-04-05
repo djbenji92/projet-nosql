@@ -404,6 +404,91 @@ app.get('/api/twitter/recuperation/presidentiel', function(req, res){
 //FIN deuxieme recuperation
 
 
+//tweet aimé ou pas
+app.get('/api/twitter/like', function(req, res){
+
+  var url = 'mongodb://localhost:27017/projet-nosql';
+  // Use connect method to connect to the server
+
+  var candidats = ['Macron', 'Fillon', 'Le Pen', 'Hamon', 'Melenchon', 'Dupont-Aignan', 'Poutou'];
+
+  var data = [];
+
+  var listeTweet = [];
+
+  candidats.forEach(function(candidat){
+    console.log(candidat);
+  });
+
+
+  candidats.forEach(function(candidat){
+    var actualCandidat = candidat;
+
+    var findDocuments = function(db, callback) {
+      // Get the documents collection
+      var collection = db.collection('tweets');
+      // Find some documents
+      var regexActuel = ".*" + actualCandidat;
+      var motPositif = ["fort", "bon", "soutien"];
+      var motNegatif = ["negatif", "aime pas", "deteste", "stupide", "debile", "aucun"];
+
+      collection.find({"text": {$regex: regexActuel}}).toArray(function(err, results) {
+          //console.log(results);
+          var countPositif = 0;
+          var countNegatif = 0;
+          results.forEach(function(result){
+            motPositif.forEach(function(mot){
+              if(result.text.indexOf(mot) !== -1){
+                console.log(mot);
+                console.log(result.text);
+                countPositif = countPositif +1;
+              }
+            });
+            motNegatif.forEach(function(mot){
+              if(result.text.indexOf(mot) !== -1){
+                console.log(mot);
+                console.log(result.text);
+                countNegatif = countNegatif +1;
+              }
+            });
+            //console.log(result.text);
+          });
+          //console.log(countPositif);
+          //console.log(countNegatif);
+          data.push({'candidat':actualCandidat, 'countPositif':countPositif, 'countNegatif':countNegatif});
+          //console.log(data);
+          callback(results);
+        })
+    }
+
+    var f1 = new Promise(function(resolve, reject){
+      MongoClient.connect(url, function(err, db) {
+        console.log("Connected à MongoDB - Recherche de tweet");
+        findDocuments(db, function(tweets) {
+          db.close();
+          //listeTweet.push(tweets);
+          /*data.push({'name':actualCandidat, 'y':count});
+          console.log(count);*/
+          resolve("Succes");
+        });
+      })
+    });
+
+    f1.then(
+      function(resolve, reject){
+        console.log('ok');
+        console.log(data);
+        if(data.length == candidats.length){
+          res.json(data);
+        }
+      }, function(err){
+        console.log("nok");
+      }
+    );
+  });
+
+});
+
 
 const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
