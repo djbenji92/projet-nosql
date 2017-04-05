@@ -7,6 +7,7 @@
   <script src="js/generate-pieChart.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 </head>
 <body>
   <div class="container">
@@ -22,12 +23,22 @@
   var data1 = {'name': "Fillon", "y":40};
   var data2 = {'name': "Macron", "y":60};
 
-  tab.push(data1);
-  tab.push(data2);
-
-  console.log(tab);
-  console.log(tab[0]);
-  generatePieChart(id, title, tab);
+  //TEST AJAX
+  var tab2;
+  $.ajax({
+       url : '/api/twitter/popularite',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         generatePieChart(id, title, json);
+         console.log(json);
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+  //FIN AJAX
 
   </script>
 </body>

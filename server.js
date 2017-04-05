@@ -218,7 +218,6 @@ app.get('/api/twitter/popularite', function(req, res){
     resolve("Succes");
   });
 
-
   p1.then(
     function(resolve, reject){
       console.log('parcour des candidats terminé');
@@ -233,6 +232,7 @@ app.get('/api/twitter/popularite', function(req, res){
       findDocuments(db, function(count) {
         db.close();
         countMacron = count;
+        data.push({'name':'Macron', 'y':count});
         console.log(count);
         resolve("Succes");
       });
@@ -244,7 +244,7 @@ app.get('/api/twitter/popularite', function(req, res){
       console.log('ok');
       console.log(countMacron);
 
-      res.json(countMacron);
+      res.json(data);
     }, function(err){
       console.log("nok");
     }
