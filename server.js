@@ -199,31 +199,30 @@ app.get('/api/twitter/popularite', function(req, res){
 
   var url = 'mongodb://localhost:27017/projet-nosql';
   // Use connect method to connect to the server
-  //var f1 = new Promise(function(resolve, reject){
+  var f1 = new Promise(function(resolve, reject){
+    MongoClient.connect(url, function(err, db) {
+      console.log("Connected à MongoDB - Recherche de tweet");
+      findDocuments(db, function(res) {
+        db.close();
+        countMacron = res;
+        console.log(res);
 
-  //});
-  MongoClient.connect(url, function(err, db) {
-    console.log("Connected à MongoDB - Recherche de tweet");
-    findDocuments(db, function(res) {
-      db.close();
-      countMacron = res;
-      console.log(res);
-    });
-  })
-  /*.then(
-    verifData(){
-      console.log("ok");
+        resolve("Succes");
+      });
+    })
+  });
+  f1.then(
+    function(resolve, reject){
+      console.log('ok');
+      console.log(countMacron);
+
+      res.send('Recherche de tweet ' + countMacron);
     }, function(err){
       console.log("nok");
     }
   );
 
-  function verifData(){
-    console.log(countMacron);
-  }*/
 
-
-  res.send('Recherche de tweet');
 });
 
 
