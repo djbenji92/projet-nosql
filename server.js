@@ -180,8 +180,9 @@ app.get('/api/twitter/recuperation', function(req, res){
 });
 
 app.get('/api/twitter/popularite', function(req, res){
-
   var countMacron = 0;
+  var candidats = ['Macron', 'Fillon'];
+  var data = [];
 
   var findDocuments = function(db, callback) {
     // Get the documents collection
@@ -197,31 +198,57 @@ app.get('/api/twitter/popularite', function(req, res){
 
   }
 
+  function findDocumentByCandidat(candidat){
+
+  }
+
+  function parcourCandidat(){
+    candidats.forEach(function(candidat){
+      //var obj = {'name':candidat, 'y':20}
+      //res.push(obj);
+      //console.log(res);
+
+    });
+  }
+
   var url = 'mongodb://localhost:27017/projet-nosql';
   // Use connect method to connect to the server
+  var p1 = new Promise(function(resolve, reject){
+    parcourCandidat();
+    resolve("Succes");
+  });
+
+
+  p1.then(
+    function(resolve, reject){
+      console.log('parcour des candidats terminé');
+    }, function(err){
+      console.log("erreur parcour candidat");
+    }
+  )
+
   var f1 = new Promise(function(resolve, reject){
     MongoClient.connect(url, function(err, db) {
       console.log("Connected à MongoDB - Recherche de tweet");
-      findDocuments(db, function(res) {
+      findDocuments(db, function(count) {
         db.close();
-        countMacron = res;
-        console.log(res);
-
+        countMacron = count;
+        console.log(count);
         resolve("Succes");
       });
     })
   });
+
   f1.then(
     function(resolve, reject){
       console.log('ok');
       console.log(countMacron);
 
-      res.send('Recherche de tweet ' + countMacron);
+      res.json(countMacron);
     }, function(err){
       console.log("nok");
     }
   );
-
 
 });
 
