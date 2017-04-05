@@ -197,7 +197,7 @@ app.get('/api/twitter/popularite', function(req, res){
   )
 
   var countMacron = 0;
-  var candidats = ['Macron', 'Fillon', 'Le Pen'];
+  var candidats = ['Macron', 'Fillon', 'Le Pen', 'Hamon', 'Melenchon', 'Dupont-Aignan', 'Poutou'];
   var data = [];
   candidats.forEach(function(candidat){
     var actualCandidat = candidat;
