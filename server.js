@@ -246,6 +246,73 @@ app.get('/api/twitter/popularite', function(req, res){
 
 });
 
+app.get('/api/twitter/favorited', function(req, res){
+
+  var url = 'mongodb://localhost:27017/projet-nosql';
+  // Use connect method to connect to the server
+  var p1 = new Promise(function(resolve, reject){
+    parcourCandidat();
+    resolve("Succes");
+  });
+
+  p1.then(
+    function(resolve, reject){
+      console.log('calcul des likes terminé');
+    }, function(err){
+      console.log("erreur calcul des likes")
+  });
+
+  var countCandidates = 0;
+
+  var candidats = ['Macron', 'Fillon', 'Le Pen', 'Hamon', 'Melenchon', 'Dupont-Aignan', 'Poutou'];
+
+  var data = [];
+  candidats.forEach(function(candidat){
+    var actualCandidat = candidat;
+
+    var findDocuments = function(db, callback) {
+      // Get the documents collection
+      var collection = db.collection('presidentielle');
+      // Find some documents
+      var regexActuel = ".*" + actualCandidat;
+
+      collection.find({retweet_count: {$gte: 100}, text: {$regex: regexActuel}}).count(function(err, count) {
+          console.log(count);
+          callback(count);
+          countCandidates = count;
+        })
+    }
+
+    var f1 = new Promise(function(resolve, reject){
+      MongoClient.connect(url, function(err, db) {
+        console.log("Connected à MongoDB - Recherche de tweet");
+        findDocuments(db, function(count) {
+          db.close();
+          countCandidates = count;
+          //data.push({'name':actualCandidat, 'y':count});
+          data.push([actualCandidat, count]);
+          console.log(data);
+          resolve("Succes");
+        });
+      })
+    });
+
+    f1.then(
+      function(resolve, reject){
+        console.log('ok');
+        console.log(countCandidates);
+        if(data.length == candidats.length){
+          res.json(data);
+        }
+      }, function(err){
+        console.log("nok");
+      }
+    );
+
+  });
+
+});
+
 //Deuxieme recuperation
 app.get('/api/twitter/recuperation/presidentiel', function(req, res){
 	console.log("recherche de tweet...");

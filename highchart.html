@@ -5,6 +5,7 @@
   <title>Projet NoSQL</title>
   <link rel="stylesheet" href="styles/styles.css">
   <script src="js/generate-pieChart.js"></script>
+  <script src="js/generate-barChart.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
@@ -14,11 +15,15 @@
     <div id="graph-1">
 
     </div>
+    <div id="graph-2" style="margin-top:500px">
+
+    </div>
   <div>
 
   <script>
   var id = "graph-1";
-  var title = "test de titre";
+  var id2 = "graph-2";
+  var title = "Présidentielle 2017 - Datavisualisation";
   var tab = [];
   var data1 = {'name': "Fillon", "y":40};
   var data2 = {'name': "Macron", "y":60};
@@ -31,6 +36,20 @@
        dataType : 'json',
        success : function(json, statut){
          generatePieChart(id, title, json);
+         console.log(json);
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+
+  $.ajax({
+       url : '/api/twitter/favorited',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         generateBarChart(id2, title, json);
          console.log(json);
        },
        error : function(resultat, statut, erreur){
