@@ -181,19 +181,6 @@ app.get('/api/twitter/recuperation', function(req, res){
 
 app.get('/api/twitter/popularite', function(req, res){
 
-  function findDocumentByCandidat(candidat){
-
-  }
-
-  function parcourCandidat(){
-    candidats.forEach(function(candidat){
-      //var obj = {'name':candidat, 'y':20}
-      //res.push(obj);
-      //console.log(res);
-
-    });
-  }
-
   var url = 'mongodb://localhost:27017/projet-nosql';
   // Use connect method to connect to the server
   var p1 = new Promise(function(resolve, reject){
@@ -210,7 +197,7 @@ app.get('/api/twitter/popularite', function(req, res){
   )
 
   var countMacron = 0;
-  var candidats = ['Macron', 'Fillon'];
+  var candidats = ['Macron', 'Fillon', 'Le Pen'];
   var data = [];
   candidats.forEach(function(candidat){
     var actualCandidat = candidat;
