@@ -45,6 +45,11 @@ app.get('/template', function (req, res) {
 	res.sendFile(__dirname + '/template.html');
 });
 
+app.get('/highchart', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/highchart.html');
+});
+
 function searchAndAddTweet(params){
   client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
@@ -149,6 +154,10 @@ app.get('/api/twitter/recuperation', function(req, res){
         //console.log("CODE 111111111111111111111 i : " . newResult.id);
 
       }*/
+
+      //TEST
+      //var count = 0;
+      //FIN TEST
 
 
       //recuperation de l'id de fin

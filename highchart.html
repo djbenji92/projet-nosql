@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Projet NoSQL</title>
+  <link rel="stylesheet" href="styles/styles.css">
+  <script src="js/generate-pieChart.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="graph-1">
+
+    </div>
+  <div>
+
+  <script>
+  var id = "graph-1";
+  var title = "test de titre";
+  var tab = [];
+  var data1 = {'name': "Fillon", "y":40};
+  var data2 = {'name': "Macron", "y":60};
+
+  tab.push(data1);
+  tab.push(data2);
+
+  console.log(tab);
+  console.log(tab[0]);
+  generatePieChart(id, title, tab);
+
+  </script>
+</body>
+</html>
