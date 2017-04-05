@@ -180,23 +180,6 @@ app.get('/api/twitter/recuperation', function(req, res){
 });
 
 app.get('/api/twitter/popularite', function(req, res){
-  var countMacron = 0;
-  var candidats = ['Macron', 'Fillon'];
-  var data = [];
-
-  var findDocuments = function(db, callback) {
-    // Get the documents collection
-    var collection = db.collection('tweets');
-    // Find some documents
-    var regex = ".*macron";
-
-    collection.find({"text": {$regex:".*Macron"}}).count(function(err, count) {
-        console.log(count);
-        callback(count);
-        countMacron = count;
-      })
-
-  }
 
   function findDocumentByCandidat(candidat){
 
@@ -226,29 +209,51 @@ app.get('/api/twitter/popularite', function(req, res){
     }
   )
 
-  var f1 = new Promise(function(resolve, reject){
-    MongoClient.connect(url, function(err, db) {
-      console.log("Connected à MongoDB - Recherche de tweet");
-      findDocuments(db, function(count) {
-        db.close();
-        countMacron = count;
-        data.push({'name':'Macron', 'y':count});
-        console.log(count);
-        resolve("Succes");
-      });
-    })
-  });
+  var countMacron = 0;
+  var candidats = ['Macron', 'Fillon'];
+  var data = [];
+  candidats.forEach(function(candidat){
+    var actualCandidat = candidat;
 
-  f1.then(
-    function(resolve, reject){
-      console.log('ok');
-      console.log(countMacron);
+    var findDocuments = function(db, callback) {
+      // Get the documents collection
+      var collection = db.collection('tweets');
+      // Find some documents
+      var regexActuel = ".*" + actualCandidat;
 
-      res.json(data);
-    }, function(err){
-      console.log("nok");
+      collection.find({"text": {$regex: regexActuel}}).count(function(err, count) {
+          console.log(count);
+          callback(count);
+          countMacron = count;
+        })
     }
-  );
+
+    var f1 = new Promise(function(resolve, reject){
+      MongoClient.connect(url, function(err, db) {
+        console.log("Connected à MongoDB - Recherche de tweet");
+        findDocuments(db, function(count) {
+          db.close();
+          countMacron = count;
+          data.push({'name':actualCandidat, 'y':count});
+          console.log(count);
+          resolve("Succes");
+        });
+      })
+    });
+
+    f1.then(
+      function(resolve, reject){
+        console.log('ok');
+        console.log(countMacron);
+        if(data.length == candidats.length){
+          res.json(data);
+        }
+      }, function(err){
+        console.log("nok");
+      }
+    );
+
+  });
 
 });
 
