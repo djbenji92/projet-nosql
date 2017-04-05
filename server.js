@@ -197,14 +197,14 @@ app.get('/api/twitter/popularite', function(req, res){
   )
 
   var countMacron = 0;
-  var candidats = ['Macron', 'Fillon', 'Le Pen'];
+  var candidats = ['Macron', 'Fillon', 'Le Pen', 'Melenchon'];
   var data = [];
   candidats.forEach(function(candidat){
     var actualCandidat = candidat;
 
     var findDocuments = function(db, callback) {
       // Get the documents collection
-      var collection = db.collection('tweets');
+      var collection = db.collection('presidentielle');
       // Find some documents
       var regexActuel = ".*" + actualCandidat;
 
@@ -243,6 +243,96 @@ app.get('/api/twitter/popularite', function(req, res){
   });
 
 });
+
+//Deuxieme recuperation
+app.get('/api/twitter/recuperation/presidentiel', function(req, res){
+	console.log("recherche de tweet...");
+	const params = {q: 'presidentielle', lang:"fr", count:"100", result_type:"recent"};
+	client.get('search/tweets', params, function(error, tweets, response) {
+	  if (!error) {
+	    console.log(tweets);
+
+			var insertDocuments = function(db, callback) {
+			  // Get the documents collection
+			  var collection = db.collection('presidentielle');
+			  // Insert some documents
+        /*
+        collection.insertMany([
+          tweets
+          //tweets.statuses
+        ],
+        */
+			  collection.insertMany(
+          tweets.statuses
+			  , function(err, result) {
+			    callback(result);
+			  });
+
+        //var jsonparser = JSON.parse(tweets);
+
+        /*for(tweet in tweets.statuses){
+          console.log(tweet);
+        }*/
+        /*console.log('---------------------------------------------------');
+        console.log(tweets.statuses);*/
+        /*tweets.forEach(function(tweet){
+          console.log(tweet);
+        });*/
+			}
+
+			var url = 'mongodb://localhost:27017/projet-nosql';
+			// Use connect method to connect to the server
+			MongoClient.connect(url, function(err, db) {
+			  console.log("Connected successfully to server");
+        console.log("nb tweets : " + tweets.statuses.length );
+			  insertDocuments(db, function() {
+			    db.close();
+			  });
+			});
+
+      var i = tweets.search_metadata.count;
+      //const nombreTweet = tweets.search_metadata.count;
+      const lastId = tweets.statuses[0].id;
+      //console.log(nombreTweet);
+
+
+      //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
+      while(i < 1500){
+        const newParams = {q: 'presidentielle', lang:"fr", count:"100", result_type:"recent", since_id: lastId}
+        const newResult = searchAndAddTweet(newParams);
+
+        i = i + 100;
+        //i = i + newResult.nbTweet;
+
+        console.log(lastId);
+        //console.log("CODE 111111111111111111111 i : " . newResult.id);
+
+      }
+
+      //TEST
+      //var count = 0;
+      //FIN TEST
+
+
+      //recuperation de l'id de fin
+
+      //console.log("max result : " + idFinal);
+
+      /*const nombreTweet = tweets.search_metadata.count;
+      const lastId = tweets.statuses[0].id;
+      console.log('--------------------RECUP ID--------------------')
+      console.log(lastId);
+      console.log();
+      console.log('identifiant tableau dernier tweet : ' + nombreTweet);*/
+
+	  } else{
+			console.log(error);
+		}
+	});
+
+	res.send('page de recuperation de tweet');
+});
+//FIN deuxieme recuperation
 
 
 
