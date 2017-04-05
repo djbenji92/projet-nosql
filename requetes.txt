@@ -1,0 +1,73 @@
+//POPULARITE PAR CANDIDAT
+db.tweets.find({"text":{$regex:".*Macron"}}).count()
+
+//POPULARITE GENERALE
+db.tweets.find(
+  { 
+    $or: [ 
+      {
+        "text":{$regex:".*Macron"}
+      },
+      {
+        "text":{$regex:".*Fillon"}
+      } 
+    ]
+  }
+
+)
+.count()
+
+db.tweets.find({ $or: [ {"text":{$regex:".*Macron"}}, {"text":{$regex:".*Fillon"}} ]}).count()
+
+
+//Recherche avec plusieurs critere => liste mot positif negatif (fonctionne pas)
+db.tweets.find({"text":{$regex:".*Macron"}, "text":{$regex:".*soutien"}}).count()
+
+
+//prevoir resultat 2eme tour : 
+Etape 1 : recuperer x tweets pour chaque candidat 
+Etape 2 : recuperer x tweets sur le mot "presidentiel" pour estimé une popularite de chacun candidat
+Etape 3 : Determiner dictionnaire de mot positif dans un tableau
+Etape 4 : Determiner dictionnaire de mot negatif dans un tableau
+Etape 5 : parcourir l'ensemble des tweet de chaque candidat et déterminer à l'aide des deux dictionnaire si un tweet est positif ou negatif
+
+Exemple de popularite
+nombre total de tweet 1000, dont tweet Macron = 400, donc popularité = 40%
+nombre total de tweet 1000, dont tweet Fillon = 600, donc popularite = 60%
+
+Exemple de tweet positif / negatif: 
+nombre total de tweet Fillon = 1000
+	=>positif : 250
+	=>negatif : 500
+	=>inconnu : 250
+	Donc score = 250 * 100 / 750 = 33,33%
+
+nombre total de tweet Macron = 1000
+	=>positif : 500
+	=> negatif : 250
+	=>inconnu : 250
+	Donc score = 500 * 100 / 750 = 66,6%
+
+Constante : nombre de votant = 44,6 (en million)
+	    absention = 20,5%
+	    null et blanc = 6%
+	    total = 26,5%
+	Soit : 44,6 * 0,745 = 32,8 million votants au premier tour
+
+vote potentiel = population * taux popularite 
+votes validé = vote potentiel * (t
+
+Fillon = potentiel =  44,6 * 0,6 = 26,8 
+	 validé = 26,8 * 0,33 = 8,8 million votant
+
+Macronc = potentiel = 44,6 * 0,4 = 17,84
+	  validé = 17,84 * 0,66 = 11,77
+
+Total validé = 8,8 + 11,77 = 20,57 millions
+
+50% popularité / 30 million = 15 million potentiel
+33% qui m'aime pas 66% qui m'aime bien
+10 millions de vote potentiel
+
+
+

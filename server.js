@@ -31,9 +31,18 @@ const client = new Twitter({
 })
 
 
+app.use('/styles', express.static(__dirname + '/styles'));
+app.use('/images', express.static(__dirname + '/images'));
+app.use('/js', express.static(__dirname + '/js'));
+
 app.get('/', function (req, res) {
 	//console.log(db);
 	res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/template', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/template.html');
 });
 
 function searchAndAddTweet(params){
@@ -46,7 +55,7 @@ function searchAndAddTweet(params){
 			  var collection = db.collection('tweets');
 			  // Insert some documents
 			  collection.insertMany([
-			    tweets
+			    tweets.statuses
 			  ], function(err, result) {
 			    callback(result);
 			  });
