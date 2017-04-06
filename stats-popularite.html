@@ -16,11 +16,14 @@
         <div class="title">
           NoSQL et BigData <span style="font-weight:bold;">ESGI</span>
         </div>
+        <h2 style="color:white; text-align:center; ">Stats elections</h2>
         <ul>
-          <li>Categorie 1</li>
-          <li>Categorie 2</li>
-          <li>Categorie 3</li>
-          <li>Categorie 4</li>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="prediction">Prédiction du second tour</a></li>
+          <li><a href="popularite">Popularité des candidats</a></li>
+          <li><a href="appreciation">Appréciation des candidats</a></li>
+          <li><a href="favoris">Tweets favoris</a></li>
+          <li><a href="influence">Influence à l'etranger</a></li>
         </ul>
       </div>
 
@@ -28,8 +31,8 @@
           <div class="header">
             <div class="content">
               <h1 style="text-align:center;">Visualisation de données</h1>
-              <div id="graph-1" style="width:50%;"> </div>
-              <div id="graph-2"> </div>
+              <h2 style="margin-top:70px; text-align:center;">Retrouvez la popularité de chacun des candidat de l'éléction présidentielle</h1>
+              <div id="graph-1" style="width:50%; margin:auto;"> </div>
             </div>
           </div>
       </div>
@@ -37,34 +40,16 @@
 
   <script>
   var id = "graph-1";
-  var id2 = "graph-2";
   var title = "Présidentielle 2017 - Datavisualisation";
   var tab = [];
-  var data1 = {'name': "Fillon", "y":40};
-  var data2 = {'name': "Macron", "y":60};
 
   //TEST AJAX
-  var tab2;
   $.ajax({
        url : '/api/twitter/popularite',
        type : 'GET',
        dataType : 'json',
        success : function(json, statut){
          generatePieChart(id, title, json);
-         console.log(json);
-       },
-       error : function(resultat, statut, erreur){
-       },
-       complete : function(resultat, statut){
-       }
-    });
-
-  $.ajax({
-       url : '/api/twitter/favorited',
-       type : 'GET',
-       dataType : 'json',
-       success : function(json, statut){
-         generateBarChart(id2, title, json);
          console.log(json);
        },
        error : function(resultat, statut, erreur){
