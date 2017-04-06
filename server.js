@@ -92,7 +92,7 @@ function searchAndAddTweet(params){
 
 app.get('/api/twitter/recuperation', function(req, res){
 	console.log("recherche de tweet...");
-	const params = {q: 'fillon', lang:"fr", count:"100", result_type: "popular"};
+	const params = {q: 'fillon+OR+macron', lang:"fr", count:"100", result_type: "popular"};
 	client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
 	    console.log(tweets);
@@ -142,9 +142,9 @@ app.get('/api/twitter/recuperation', function(req, res){
 
 
       //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
-    /*  while(i < 1500){
+      while(i < 1500){
 
-        const newParams = {q: 'fillon', lang:"fr", count:"100", result_type: "popular", since_id: lastId}
+        const newParams = {q: 'fillon+OR+macron', lang:"fr", count:"100", result_type: "popular", since_id: lastId}
         const newResult = searchAndAddTweet(newParams);
 
         i = i + 100;
@@ -153,7 +153,7 @@ app.get('/api/twitter/recuperation', function(req, res){
         console.log(lastId);
         //console.log("CODE 111111111111111111111 i : " . newResult.id);
 
-      }*/
+      }
 
       //TEST
       //var count = 0;
@@ -314,7 +314,7 @@ app.get('/api/twitter/favorited', function(req, res){
 });
 
 //Deuxieme recuperation
-app.get('/api/twitter/recuperation/presidentiel', function(req, res){
+app.get('/api/twitter/recuperation/presidentielle', function(req, res){
 	console.log("recherche de tweet...");
 	const params = {q: 'presidentielle', lang:"fr", count:"100", result_type:"recent"};
 	client.get('search/tweets', params, function(error, tweets, response) {
