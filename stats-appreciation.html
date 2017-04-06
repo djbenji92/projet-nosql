@@ -7,6 +7,7 @@
   <script src="js/generate-pieChart.js"></script>
   <script src="js/generate-barChart.js"></script>
   <script src="js/generate-DoubleBarChart.js"></script>
+  <script src="js/generate-barChart-multibar.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
@@ -31,9 +32,10 @@
       <div class="centre">
           <div class="header">
             <div class="content">
-              <h1 style="text-align:center;">Visualisation de données (je men charge demain mon script est pret plus qu'a appliqué)</h1>
+              <h1 style="text-align:center;">Visualisation de données</h1>
               <h2 style="margin-top:70px; text-align:center;">Retrouvez le nombre de tweets critiquant positivement ou negativement chacun des candidats</h1>
               <div id="graph-1" style="width:50%; margin:auto;"> </div>
+              <div id="graph-2" style="width:50%; margin-left:auto; margin-right:auto; margin-top:10px;"> </div>
             </div>
           </div>
       </div>
@@ -42,23 +44,30 @@
   <script>
   var id = "graph-1";
   var title = "Appréciation des candidats";
-  var tab = [{'name':'Macron', 'data':[30,20]}];
-  var categories = ['positive'];
-  generateDoubleBarChart(id, title, tab, categories);
+  var categories = ['positive', 'negative'];
+  var tabPositive = [];
+  var tabNegative = [];
   //TEST AJAX
-  /*$.ajax({
-       url : '/api/twitter/?',
+  $.ajax({
+       url : '/api/twitter/like',
        type : 'GET',
        dataType : 'json',
        success : function(json, statut){
-         generateBarChart(id, title, json);
+         //generateBarChart(id, title, json);
          console.log(json);
+         json.forEach(function(res){
+           tabPositive.push({'name':res.candidat, 'y':res.countPositif})
+           tabNegative.push({'name':res.candidat, 'y':res.countNegatif})
+         })
+         console.log(tabPositive);
+         generateBarChart('graph-1', 'Appreciations positives des candidats', 'Title 1', tabPositive, null)
+         generateBarChart('graph-2', 'Appreciations negatives des candidats', 'Title 2', tabNegative, null)
        },
        error : function(resultat, statut, erreur){
        },
        complete : function(resultat, statut){
        }
-    });*/
+    });
   //FIN AJAX
 
   </script>
