@@ -5,7 +5,7 @@
   <title>Projet NoSQL</title>
   <link rel="stylesheet" href="styles/styles.css">
   <script src="js/generate-pieChart.js"></script>
-  <script src="js/generate-barChart.js"></script>
+  <script src="js/generate-barChart2.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
@@ -32,8 +32,7 @@
             <div class="content">
               <h1 style="text-align:center;">Visualisation de données</h1>
               <h2 style="margin-top:70px; text-align:center;">Retrouvez le nombre de tweet favoris pour l'éléction présidentielle</h1>
-              <div id="graph-2" style="width:50%;"> </div>
-              <div id="graph-1" style="width:50%;"> </div>
+              <div id="graph-1" style="width:50%; margin:auto"> </div>
             </div>
           </div>
       </div>
@@ -41,41 +40,83 @@
 
   <script>
   var id = "graph-1";
-  var id2 = "graph-2";
-  var title = "Nombre de tweets retweetés plus de 100 fois";
-  var title2 = "Nombre de tweets total";
+  var title = "Comparaison des tweets et retweetés plus de 100 fois";
   var title_y = "Nombre de tweets ";
   var tab = [];
+  
 
-  //AJAX
-  $.ajax({
-       url : '/api/twitter/retweeted',
-       type : 'GET',
-       dataType : 'json',
-       success : function(json, statut){
-         generateBarChart(id, title, title_y, json);
-         console.log(json);
-       },
-       error : function(resultat, statut, erreur){
-       },
-       complete : function(resultat, statut){
-       }
-    });
+  var datas1 = [];
+  var datas2 = [];
 
-  $.ajax({
-       url : '/api/twitter/popularite',
-       type : 'GET',
-       dataType : 'json',
-       success : function(json, statut){
-         generateBarChart(id2, title2, title_y, json);
-         console.log(json);
-       },
-       error : function(resultat, statut, erreur){
-       },
-       complete : function(resultat, statut){
-       }
-    });
-  //FIN AJAX
+   
+
+    var f1 = new Promise(function(resolve, reject){
+       //AJAX
+      $.ajax({
+           url : '/api/twitter/retweeted',
+           type : 'GET',
+           dataType : 'json',
+           success : function(json, statut){
+             //generateBarChart(id, title, title_y, json);
+             //console.log(json);
+             datas1.push(json);
+             resolve("ok-favoris");
+           },
+           error : function(resultat, statut, erreur){
+           },
+           complete : function(resultat, statut){
+           }
+        });
+      });
+
+      f1.then(
+      function(resolve, reject){
+        console.log('datas');
+        var f2 = new Promise(function(resolve, reject){
+          $.ajax({
+           url : '/api/twitter/popularite',
+           type : 'GET',
+           dataType : 'json',
+           success : function(json, statut){
+             //console.log(json);
+             /*var newJson =[];
+              for( var i in json ) {
+                  if (json.hasOwnProperty(i)){
+                     newJson.push(json[i]);
+                  }
+              }*/
+             datas2.push(json);
+             resolve("ok-favoris");
+           },
+           error : function(resultat, statut, erreur){
+           },
+           complete : function(resultat, statut){
+           }
+          });
+        });
+        f2.then(
+          function(resolve, reject){
+            console.log(datas1);
+            console.log(datas2);
+            generateBarChart(id, title, title_y, datas1, datas2);
+          }, function(err){
+            console.log("nok");
+          }
+        )
+
+        
+      }, function(err){
+        console.log("nok");
+      }
+    );
+
+      
+        //FIN AJAX
+
+
+    
+  
+  
 
   </script>
 </body>

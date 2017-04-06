@@ -119,7 +119,7 @@ function searchAndAddTweet(params){
 
 app.get('/api/twitter/recuperation', function(req, res){
 	console.log("recherche de tweet...");
-	const params = {q: 'fillon+OR+macron+OR+Poutou+OR+Le pen+OR+Hamon+OR+Melenchon+OR+Dupont-Aignan', lang:"fr", count:"100", result_type: "popular"};
+	const params = {q: 'Fillon', lang:"fr", count:"100"};
 	client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
 	    console.log(tweets);
@@ -171,7 +171,7 @@ app.get('/api/twitter/recuperation', function(req, res){
       //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
       while(i < 1500){
 
-        const newParams = {q: 'fillon+OR+macron+OR+Poutou+OR+Le pen+OR+Hamon+OR+Melenchon+OR+Dupont-Aignan', lang:"fr", count:"100", result_type: "popular", since_id: lastId}
+        const newParams = {q: 'Fillon', lang:"fr", count:"100", since_id: lastId}
         const newResult = searchAndAddTweet(newParams);
 
         i = i + 100;
