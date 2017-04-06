@@ -33,6 +33,9 @@
               <h1 style="text-align:center;">Visualisation de données (je men charge demain aussi => suite appreciation)</h1>
               <h2 style="margin-top:70px; text-align:center;">Retrouvez nos prédiction du résultat du premier tour</h1>
               <div id="graph-1" style="width:50%; margin:auto;"> </div>
+              <div id="result-pres" class="result-pres" style="display:flex;">
+
+              </div>
             </div>
           </div>
       </div>
@@ -42,8 +45,92 @@
   var id = "graph-1";
   var title = "Présidentielle 2017 - Datavisualisation";
   var tab = [];
+  var tabPopularite;
+  var tabLike;
+  var tabResult = [];
+
+  function generatePrediction(){
+    console.log(tabPopularite.length)
+    var i =0;
+    tabPopularite.forEach(function(candidat){
+      var find = false;
+      while(find == false){
+        //console.log(tabLike[i].candidat +' : ' +candidat.name);
+        if(tabLike[i].candidat == candidat.name){
+          tabResult.push({'candidat':candidat.name, 'popularite':candidat.y, 'like':tabLike[i].countPositif, 'dislike':tabLike[i].countNegatif});
+          find = true;
+          i = 0;
+          continue;
+        }
+        i = i +1;
+      }
+    })
+
+    console.log(tabResult);
+    var population = 44.6;
+    tabResult.forEach(function(result){
+      console.log(result.candidat);
+      $('#result-pres').append(
+        '<div class="candidat" style="width:300px; height:300px; border:5px solid black;">'
+          +'<h1>'+result.candidat+'</h1>'
+          +'<p>popularite : '+result.popularite+'</p>'
+          +'<p>like : '+result.like+'</p>'
+          +'<p>dislike : '+result.dislike+'</p>'
+        +'</div>'
+      );
+    })
+      //$('#result-pres').append()
+
+  }
 
   //TEST AJAX
+  var p1 = new Promise(function(resolve, reject){
+    $.ajax({
+         url : '/api/twitter/popularite',
+         type : 'GET',
+         dataType : 'json',
+         success : function(json, statut){
+           tabPopularite = json;
+           resolve("Succes");
+         },
+         error : function(resultat, statut, erreur){
+         },
+         complete : function(resultat, statut){
+         }
+      });
+  })
+  p1.then(
+    function(resolve, reject){
+      console.log('ok popularite');
+      console.log(tabPopularite);
+      var p2 = new Promise(function(resolve, reject){
+        $.ajax({
+             url : '/api/twitter/like',
+             type : 'GET',
+             dataType : 'json',
+             success : function(json, statut){
+               tabLike = json;
+               resolve("Succes");
+             },
+             error : function(resultat, statut, erreur){
+             },
+             complete : function(resultat, statut){
+             }
+          });
+      })
+      p2.then(
+        function(resolve, reject){
+          console.log('ok twitter');
+          console.log(tabLike);
+          generatePrediction();
+        }, function(err){
+          console.log("nok");
+        }
+      );
+    }, function(err){
+      console.log("nok");
+    }
+  );
   /*$.ajax({
        url : '/api/twitter/?',
        type : 'GET',
