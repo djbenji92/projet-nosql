@@ -43,6 +43,7 @@
   var title = "Tweets sur les candidats par pays";
   var title_y = "Nombre de tweets";
   var tab = [];
+  var tabResult = [];
 
   //TEST AJAX
   $.ajax({
@@ -50,7 +51,11 @@
        type : 'GET',
        dataType : 'json',
        success : function(json, statut){
-         generateBarChart(id, title,title_y, json);
+         json.forEach(function(res){
+           tabResult.push({'name':res._id, 'y': res.count});
+           console.log(res);
+         })
+         generateBarChart(id, title,title_y, tabResult);
          console.log(json);
        },
        error : function(resultat, statut, erreur){
