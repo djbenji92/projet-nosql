@@ -9,6 +9,10 @@
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+    </script>
 </head>
 <body>
   <div class="container">
@@ -33,6 +37,7 @@
               <h1 style="text-align:center;">Visualisation de données</h1>
               <h2 style="margin-top:70px; text-align:center;">Retrouver les pays qui suivent l'éléction présidentielle francaise</h1>
               <div id="graph-1" style="width:50%; margin:auto;"> </div>
+              <div id="graph-2" style="width:50%; margin:auto;"> </div>
             </div>
           </div>
       </div>
@@ -44,6 +49,60 @@
   var title_y = "Nombre de tweets";
   var tab = [];
   var tabResult = [];
+  var tabGoogle = [];
+  tabGoogle.push(['Country', 'Popularity']);
+
+
+  function generateGoogle() {
+
+    google.charts.load('current', {'packages':['geochart']});
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+
+        var data = google.visualization.arrayToDataTable(
+          tabGoogle
+        );
+
+        var options = {};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('graph-2'));
+
+        chart.draw(data, options);
+      }
+  }
+
+  function renameDataGoogle(){
+    var countLigne = 0;
+    tabGoogle.forEach(function(res){
+      console.log(res[0]);
+      if(res[0] == "fr"){
+        tabGoogle[countLigne][0] = "France";
+      }
+      if(res[0] == "en"){
+        tabGoogle[countLigne][0] = "Angleterre";
+      }
+      if(res[0] == "it"){
+        tabGoogle[countLigne][0] = "Italie";
+      }
+      if(res[0] == "es"){
+        tabGoogle[countLigne][0] = "Espagne";
+      }
+      if(res[0] == "de"){
+        tabGoogle[countLigne][0] = "Allemagne";
+      }
+      if(res[0] == "ru"){
+        tabGoogle[countLigne][0] = "Russie";
+      }
+      countLigne = countLigne + 1;
+    })
+    console.log(tabGoogle);
+    generateGoogle(tabGoogle);
+
+    //TEST INTEGRATION GOOGLE charts
+
+    //FIN
+  }
 
   //TEST AJAX
   $.ajax({
@@ -53,10 +112,12 @@
        success : function(json, statut){
          json.forEach(function(res){
            tabResult.push({'name':res._id, 'y': res.count});
-           console.log(res);
+           tabGoogle.push([res._id, res.count]);
          })
          generateBarChart(id, title,title_y, tabResult);
-         console.log(json);
+         renameDataGoogle();
+         //console.log(json);
+         //console.log(tabGoogle);
        },
        error : function(resultat, statut, erreur){
        },
