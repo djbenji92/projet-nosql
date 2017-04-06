@@ -50,6 +50,33 @@ app.get('/highchart', function (req, res) {
 	res.sendFile(__dirname + '/highchart.html');
 });
 
+app.get('/popularite', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/stats-popularite.html');
+});
+
+app.get('/favoris', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/stats-favoris.html');
+});
+
+app.get('/appreciation', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/stats-appreciation.html');
+});
+
+app.get('/prediction', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/stats-prediction.html');
+});
+
+app.get('/influence', function (req, res) {
+	//console.log(db);
+	res.sendFile(__dirname + '/stats-influence.html');
+});
+
+
+
 function searchAndAddTweet(params){
   client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {

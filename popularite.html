@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Projet NoSQL</title>
+  <link rel="stylesheet" href="styles/styles.css">
+  <script src="js/generate-pieChart.js"></script>
+  <script src="js/generate-barChart.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+</head>
+<body>
+  <div class="container">
+      <div class="menu-gauche">
+        <div class="title">
+          NoSQL et BigData <span style="font-weight:bold;">ESGI</span>
+        </div>
+        <h2 style="color:white; text-align:center; ">Stats elections</h2>
+        <ul>
+          <li><a href="">Prédiction du second tour</a></li>
+          <li><a href="">Popularité des candidats</a></li>
+          <li><a href="">Appréciation des candidats</a></li>
+          <li><a href="">Tweets favoris</a></li>
+          <li><a href="">Influence à l'etranger</a></li>
+        </ul>
+      </div>
+
+      <div class="centre">
+          <div class="header">
+            <div class="content">
+              <h1 style="text-align:center;">Visualisation de données</h1>
+              <div id="graph-1" style="width:50%;"> </div>
+              <div id="graph-2"> </div>
+            </div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+  var id = "graph-1";
+  var id2 = "graph-2";
+  var title = "Présidentielle 2017 - Datavisualisation";
+  var tab = [];
+  var data1 = {'name': "Fillon", "y":40};
+  var data2 = {'name': "Macron", "y":60};
+
+  //TEST AJAX
+  var tab2;
+  $.ajax({
+       url : '/api/twitter/popularite',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         generatePieChart(id, title, json);
+         console.log(json);
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+
+  $.ajax({
+       url : '/api/twitter/favorited',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         generateBarChart(id2, title, json);
+         console.log(json);
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+  //FIN AJAX
+
+  </script>
+</body>
+</html>
