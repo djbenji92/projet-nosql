@@ -641,8 +641,8 @@ app.get('/api/twitter/like', function(req, res){
       var collection = db.collection('tweets');
       // Find some documents
       var regexActuel = ".*" + actualCandidat;
-      var motPositif = ["fort", "bon", "soutien"];
-      var motNegatif = ["negatif", "aime pas", "deteste", "stupide", "debile", "aucun"];
+      var motPositif = ["fort", "bon", "soutien", "satisfait", "triompher", "réjoui", "bonheur", "joie", "passionnant", "enthousiasme", "idéal", "candidat idéal", "fier", "admirable", "adroit", "atout", "bienveillant" ];
+      var motNegatif = ["negatif", "aime pas", "deteste", "stupide", "debile", "aucun", "égoïste", "voleur", "vol", "menteur", "escroc", "amnésique", "flou", "trahi", "trahison"];
 
       collection.find({"text": {$regex: regexActuel}}).toArray(function(err, results) {
           //console.log(results);
