@@ -32,7 +32,8 @@
             <div class="content">
               <h1 style="text-align:center;">Visualisation de données</h1>
               <h2 style="margin-top:70px; text-align:center;">Retrouvez le nombre de tweet favoris pour l'éléction présidentielle</h1>
-              <div id="graph-1" style="width:50%; margin:auto;"> </div>
+              <div id="graph-2" style="width:50%;"> </div>
+              <div id="graph-1" style="width:50%;"> </div>
             </div>
           </div>
       </div>
@@ -40,16 +41,33 @@
 
   <script>
   var id = "graph-1";
-  var title = "Présidentielle 2017 - Datavisualisation";
+  var id2 = "graph-2";
+  var title = "Nombre de tweets retweetés plus de 100 fois";
+  var title2 = "Nombre de tweets total";
+  var title_y = "Nombre de tweets ";
   var tab = [];
 
-  //TEST AJAX
+  //AJAX
   $.ajax({
-       url : '/api/twitter/favorited',
+       url : '/api/twitter/retweeted',
        type : 'GET',
        dataType : 'json',
        success : function(json, statut){
-         generateBarChart(id, title, json);
+         generateBarChart(id, title, title_y, json);
+         console.log(json);
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+
+  $.ajax({
+       url : '/api/twitter/popularite',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         generateBarChart(id2, title2, title_y, json);
          console.log(json);
        },
        error : function(resultat, statut, erreur){

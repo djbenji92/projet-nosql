@@ -40,23 +40,24 @@
 
   <script>
   var id = "graph-1";
-  var title = "Présidentielle 2017 - Datavisualisation";
+  var title = "Tweets sur les candidats par pays";
+  var title_y = "Nombre de tweets";
   var tab = [];
 
   //TEST AJAX
-  /*$.ajax({
-       url : '/api/twitter/?',
+  $.ajax({
+       url : '/api/twitter/popularite-mondiale',
        type : 'GET',
        dataType : 'json',
        success : function(json, statut){
-         generateBarChart(id, title, json);
+         generateBarChart(id, title,title_y, json);
          console.log(json);
        },
        error : function(resultat, statut, erreur){
        },
        complete : function(resultat, statut){
        }
-    });*/
+    });
   //FIN AJAX
 
   </script>

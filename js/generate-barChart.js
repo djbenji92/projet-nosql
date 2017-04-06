@@ -1,6 +1,6 @@
 //data = [{name="x", data:[1,3,5]},{name="x", data:[1,3,5]}]
 
-function generateBarChart(id, title, data, candidat){
+function generateBarChart(id, title, title_y, data, candidat){
   Highcharts.chart(id, {
     chart: {
         type: 'column'
@@ -9,7 +9,7 @@ function generateBarChart(id, title, data, candidat){
         text: title
     },
     subtitle: {
-        text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
+        text: ''
     },
     xAxis: {
         type: 'category',
@@ -24,24 +24,24 @@ function generateBarChart(id, title, data, candidat){
     yAxis: {
         min: 0,
         title: {
-            text: 'titre y'
+            text: ''
         }
     },
     legend: {
         enabled: false
     },
     tooltip: {
-        pointFormat: 'Population in 2008: <b>{point.y:.1f} millions</b>'
+        pointFormat: title_y+': <b>{point.y}</b>'
     },
     series: [{
-        name: 'Population',
+        name: '',
         data: data,
         dataLabels: {
             enabled: true,
             rotation: -90,
             color: '#FFFFFF',
             align: 'right',
-            format: '{point.y:.1f}', // one decimal
+            format: '{point.y}',    
             y: 10, // 10 pixels down from the top
             style: {
                 fontSize: '13px',
