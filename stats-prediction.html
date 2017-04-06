@@ -30,10 +30,13 @@
       <div class="centre">
           <div class="header">
             <div class="content">
-              <h1 style="text-align:center;">Visualisation de données (je men charge demain aussi => suite appreciation)</h1>
-              <h2 style="margin-top:70px; text-align:center;">Retrouvez nos prédiction du résultat du premier tour</h1>
-              <div id="graph-1" style="width:50%; margin:auto;"> </div>
-              <div id="result-pres" class="result-pres" style="display:flex;">
+
+              <h1 style="margin-bottom:60px;">Prévisions des résultats du premier tour</h1>
+              <div id="resultat" class="resultats" style="display:flex;justify-content:space-around; align-content:space-around; flex-wrap:wrap; width:100%;">
+
+              </div>
+              <h1 style="margin-bottom:60px;">Détail du calcul</h1>
+              <div id="result-pres" class="result-pres" style="display:flex; justify-content:space-around; width:100%; flex-wrap:wrap;">
 
               </div>
             </div>
@@ -74,6 +77,7 @@
 
     console.log(tabResult);
     var population = 44.6;
+
     tabResult.forEach(function(result){
       var tauxAppreciation = 0;
       var tauxPopularite = 0;
@@ -93,10 +97,10 @@
       var nbVoteCandidiat = (population * tauxPopularite) * tauxAppreciation;
 
       console.log(result.candidat);
+
       $('#result-pres').append(
-        '<div class="candidat" style="width:300px; height:600px; border:5px solid black;">'
-          +'<h1>'+result.candidat+'</h1>'
-          +'<img src="images/'+result.candidat.toLowerCase()+'.jpg "/>'
+        '<div class="candidat" style="width:320px; height:500px;">'
+          +'<img style="" src="images/'+result.candidat.toLowerCase()+'.jpg "/>'
           +'<p>popularite : '+result.popularite+'</p>'
           //+'<p>taux popularite : '+(result.popularite/totalPopularite)+'</p>'
           +'<p>taux popularite : '+tauxPopularite+'</p>'
@@ -108,12 +112,48 @@
         +'</div>'
       );
 
+      totalVote = totalVote + nbVoteCandidiat;
       tabResultFinal.push({'candidat':result.candidat, 'nbVotes':nbVoteCandidiat});
+
     })
+
+
+    tabResult.forEach(function(result){
+      var tauxAppreciation = 0;
+      var tauxPopularite = 0;
+
+      if(result.like == 1 && result.dislike == 0){
+        tauxAppreciation = 1;
+      } else if(result.like !== 0 && result.like !== 0){
+        tauxAppreciation = (result.like) / (result.dislike + result.like);
+      } else if(result.like == 0 && result.like == 0){
+        tauxAppreciation = 1;
+      }
+
+      if(result.popularite !== 0){
+        tauxPopularite = result.popularite/totalPopularite;
+      }
+
+      var nbVoteCandidiat = (population * tauxPopularite) * tauxAppreciation;
+      console.log('------');
+      console.log(result.candidat);
+      console.log(nbVoteCandidiat +' - '+ totalVote);
+      console.log('------');
+
+      var pourcentScore = nbVoteCandidiat/totalVote*100;
+      $('#resultat').append(
+        '<div class="candidat" style="width:300px;">'
+          +'<img style="width:300px;" src="images/'+result.candidat.toLowerCase()+'.jpg "/>'
+          +'<h2 style="text-align:center;">'+result.candidat+'<h2/>'
+          +'<h2 style="text-align:center;">'+pourcentScore.toFixed(2)+'%<h2/>'
+        +'</div>'
+      );
+    });
       //$('#result-pres').append()
-      console.log("total popularite = " + totalPopularite);
+      /*console.log("total popularite = " + totalPopularite);
       console.log(tabResult);
       console.log(tabResultFinal);
+      console.log(totalVote);*/
   }
 
   //TEST AJAX
