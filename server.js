@@ -119,7 +119,7 @@ function searchAndAddTweet(params){
 
 app.get('/api/twitter/recuperation', function(req, res){
 	console.log("recherche de tweet...");
-	const params = {q: 'Fillon', lang:"fr", count:"100"};
+	const params = {q: 'Dupont-Aignan', lang:"fr", count:"100"};
 	client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
 	    console.log(tweets);
@@ -171,7 +171,7 @@ app.get('/api/twitter/recuperation', function(req, res){
       //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
       while(i < 1500){
 
-        const newParams = {q: 'Fillon', lang:"fr", count:"100", since_id: lastId}
+        const newParams = {q: 'Dupont-Aignan', lang:"fr", count:"100", since_id: lastId}
         const newResult = searchAndAddTweet(newParams);
 
         i = i + 100;
@@ -209,7 +209,7 @@ app.get('/api/twitter/recuperation', function(req, res){
 //Get Tweets from the all world
 app.get('/api/twitter/recuperation-mondiale', function(req, res){
   console.log("recherche de tweet...");
-  const params = {q: 'fillon+OR+macron+OR+Poutou+OR+Le pen+OR+Hamon+OR+Melenchon+OR+Dupont-Aignan', count:"100"};
+  const params = {q: 'Fillon+OR+Macron+OR+Poutou+OR+Le pen+OR+Hamon+OR+Melenchon+OR+Dupont-Aignan', count:"100"};
   client.get('search/tweets', params, function(error, tweets, response) {
     if (!error) {
       console.log(tweets);
@@ -261,7 +261,7 @@ app.get('/api/twitter/recuperation-mondiale', function(req, res){
       //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
       while(i < 1500){
 
-        const newParams = {q: 'fillon+OR+macron+OR+Poutou+OR+Le pen+OR+Hamon+OR+Melenchon+OR+Dupont-Aignan', count:"100", since_id: lastId}
+        const newParams = {q: 'Fillon+OR+Macron+OR+Poutou+OR+Le pen+OR+Hamon+OR+Melenchon+OR+Dupont-Aignan', count:"100", since_id: lastId}
         const newResult = searchAndAddTweet(newParams);
 
         i = i + 100;
