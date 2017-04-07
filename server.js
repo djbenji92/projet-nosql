@@ -119,7 +119,7 @@ function searchAndAddTweet(params){
 
 app.get('/api/twitter/recuperation', function(req, res){
 	console.log("recherche de tweet...");
-	const params = {q: 'Dupont-Aignan', lang:"fr", count:"100"};
+	const params = {q: 'Poutou', lang:"fr", count:"100"};
 	client.get('search/tweets', params, function(error, tweets, response) {
 	  if (!error) {
 	    console.log(tweets);
@@ -171,7 +171,7 @@ app.get('/api/twitter/recuperation', function(req, res){
       //const idFinal = tweets.search_metadata.next_results.split("=")[1].split('&')[0];
       while(i < 1500){
 
-        const newParams = {q: 'Dupont-Aignan', lang:"fr", count:"100", since_id: lastId}
+        const newParams = {q: 'Poutou', lang:"fr", count:"100", since_id: lastId}
         const newResult = searchAndAddTweet(newParams);
 
         i = i + 100;
@@ -370,6 +370,60 @@ app.get('/api/twitter/count-tweets', function(req, res){
   var findDocuments = function(db, callback) {
     // Get the documents collection
     var collection = db.collection('tweets');
+    // Find some documents
+
+    collection.find().count(function(err, count) {
+        console.log(count);
+        callback(count);
+        countMacron = count;
+      })
+  }
+
+  MongoClient.connect(url, function(err, db) {
+    console.log("Connected à MongoDB - compte les tweets");
+    findDocuments(db, function(count) {
+      db.close();
+      res.json(count);
+      //data.push(count);
+      console.log(count);
+    });
+  });
+
+});
+
+app.get('/api/twitter/count-tweetsworld', function(req, res){
+  var url = 'mongodb://localhost:27017/projet-nosql';
+
+  var findDocuments = function(db, callback) {
+    // Get the documents collection
+    var collection = db.collection('tweetsworld');
+    // Find some documents
+
+    collection.find().count(function(err, count) {
+        console.log(count);
+        callback(count);
+        countMacron = count;
+      })
+  }
+
+  MongoClient.connect(url, function(err, db) {
+    console.log("Connected à MongoDB - compte les tweets");
+    findDocuments(db, function(count) {
+      db.close();
+      res.json(count);
+      //data.push(count);
+      console.log(count);
+    });
+  });
+
+});
+
+app.get('/api/twitter/count-presidentielle', function(req, res){
+  var url = 'mongodb://localhost:27017/projet-nosql';
+
+  var findDocuments = function(db, callback) {
+    // Get the documents collection
+    var collection = db.collection('presidentielle');
     // Find some documents
 
     collection.find().count(function(err, count) {

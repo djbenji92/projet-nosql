@@ -33,7 +33,7 @@
           <div class="header">
             <div class="content">
               <h1 style="text-align:center;">Appréciation des candidats</h1>
-              <h2 style="margin-top:70px; text-align:center;">Retrouvez le nombre de tweets critiquant positivement ou negativement chacun des candidats</h1>
+              <h2 id="titre-appreciation" style="margin-top:70px; text-align:center;"></h1>
               <div id="graph-1" style="width:50%; margin:auto;"> </div>
               <div id="graph-2" style="width:50%; margin-left:auto; margin-right:auto; margin-top:10px;"> </div>
             </div>
@@ -62,6 +62,21 @@
          console.log(tabPositive);
          generateBarChart('graph-1', 'Appreciations positives des candidats', 'Title 1', tabPositive, null)
          generateBarChart('graph-2', 'Appreciations negatives des candidats', 'Title 2', tabNegative, null)
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+
+  $.ajax({
+       url : '/api/twitter/count-tweets',
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         countTweets = json;
+         $('#titre-appreciation').append("Retrouvez le nombre de tweets critiquant positivement ou negativement chacun des candidats (sondé sur " + countTweets + " Tweets)");
+         console.log(json);
        },
        error : function(resultat, statut, erreur){
        },
