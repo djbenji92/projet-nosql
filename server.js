@@ -728,6 +728,62 @@ app.get('/api/twitter/like', function(req, res){
 
 });
 
+//automatisation generation de twwet via un boutton
+app.get('/api/twitter/recuperation/auto/:query/:nbTweets/:collectiondb', function(req, res){
+  var queryDemande = req.params.query;
+  var nbTweetsDemande = req.params.nbTweets;
+  var collectionDemande = req.params.collectiondb;
+
+  console.log(queryDemande);
+  console.log(nbTweetsDemande);
+  console.log(collectionDemande);
+
+
+	console.log("recherche de tweet...");
+	const params = {q: queryDemande, lang:"fr", count:"100", result_type:"recent"};
+	client.get('search/tweets', params, function(error, tweets, response) {
+	  if (!error) {
+	    console.log(tweets);
+			var insertDocuments = function(db, callback) {
+			  var collection = db.collection(collectionDemande);
+
+			  collection.insertMany(
+          tweets.statuses
+			  , function(err, result) {
+			    callback(result);
+			  });
+			}
+
+			var url = 'mongodb://localhost:27017/projet-nosql';
+			// Use connect method to connect to the server
+			MongoClient.connect(url, function(err, db) {
+			  console.log("Connected successfully to server");
+        console.log("nb tweets : " + tweets.statuses.length );
+			  insertDocuments(db, function() {
+			    db.close();
+			  });
+			});
+
+      var i = tweets.search_metadata.count;
+      const lastId = tweets.statuses[0].id;
+      while(i < (nbTweetsDemande/15)){
+        const newParams = {q: 'presidentielle', lang:"fr", count:"100", result_type:"recent", since_id: lastId}
+        const newResult = searchAndAddTweet(newParams);
+
+        i = i + 100;
+
+        console.log(lastId);
+      }
+
+
+	  } else{
+			console.log(error);
+		}
+	});
+
+	res.json('finish');
+});
+
 
 const server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
