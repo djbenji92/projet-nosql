@@ -364,6 +364,33 @@ app.get('/api/twitter/popularite', function(req, res){
 
 });
 
+app.get('/api/twitter/count-tweets', function(req, res){
+  var url = 'mongodb://localhost:27017/projet-nosql';
+
+  var findDocuments = function(db, callback) {
+    // Get the documents collection
+    var collection = db.collection('tweets');
+    // Find some documents
+
+    collection.find().count(function(err, count) {
+        console.log(count);
+        callback(count);
+        countMacron = count;
+      })
+  }
+
+  MongoClient.connect(url, function(err, db) {
+    console.log("Connected à MongoDB - compte les tweets");
+    findDocuments(db, function(count) {
+      db.close();
+      res.json(count);
+      //data.push(count);
+      console.log(count);
+    });
+  });
+
+});
+
 //Candidates popularity through the world
 app.get('/api/twitter/popularite-mondiale', function(req, res){
 

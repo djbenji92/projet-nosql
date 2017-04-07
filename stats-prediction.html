@@ -32,7 +32,7 @@
             <div class="content">
 
 
-              <h1 style="margin-bottom:60px;">Prévisions des résultats du premier tour</h1>
+              <h1 id="previsionTitre" style="margin-bottom:60px;"></h1>
               <div id="resultat" class="resultats" style="display:flex;justify-content:space-around; align-content:space-around; flex-wrap:wrap; width:100%;">
 
               </div>
@@ -57,6 +57,7 @@
 
 
   function generatePrediction(){
+    $('#previsionTitre').append("Prévisions des résultats du premier tour (sondé sur " + countTweets + " Tweets)");
     console.log(tabPopularite.length)
     var i =0;
     tabPopularite.forEach(function(candidat){
@@ -159,6 +160,7 @@
   }
 
   //TEST AJAX
+  var countTweets = 0
   var p1 = new Promise(function(resolve, reject){
     $.ajax({
          url : '/api/twitter/popularite',
@@ -197,7 +199,31 @@
         function(resolve, reject){
           console.log('ok twitter');
           console.log(tabLike);
-          generatePrediction();
+          var p3 = new Promise(function(resolve, reject){
+            $.ajax({
+                 url : '/api/twitter/count-tweets',
+                 type : 'GET',
+                 dataType : 'json',
+                 success : function(json, statut){
+                   countTweets = json;
+                   resolve("Succes");
+                 },
+                 error : function(resultat, statut, erreur){
+                 },
+                 complete : function(resultat, statut){
+                 }
+              });
+          })
+          p3.then(
+            function(resolve, reject){
+              console.log('ok twitter');
+              console.log(tabLike);
+              generatePrediction();
+            }, function(err){
+              console.log("nok");
+            }
+          );
+          //generatePrediction();
         }, function(err){
           console.log("nok");
         }
