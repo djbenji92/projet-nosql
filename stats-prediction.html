@@ -141,12 +141,12 @@
           +'<img style="" src="images/'+result.candidat.toLowerCase()+'.jpg "/>'
           +'<p>popularite : '+result.popularite+'</p>'
           //+'<p>taux popularite : '+(result.popularite/totalPopularite)+'</p>'
-          +'<p>taux popularite : '+tauxPopularite+'</p>'
+          +'<p>taux popularite : '+(tauxPopularite*100).toFixed(2)+'%</p>'
           +'<p>like : '+result.like+'</p>'
           +'<p>dislike : '+result.dislike+'</p>'
-          +'<p>taux apprecition  : '+tauxAppreciation+'</p>'
+          +'<p>taux apprecition  : '+(tauxAppreciation*100).toFixed(2)+'%</p>'
           //+'<p>taux apprecition  : '+(result.like * 100 /(result.dislike + result.like))+'</p>'
-          +'<p>Nombre de vote  : '+nbVoteCandidiat+'</p>'
+          +'<p>Nombre de vote  : '+nbVoteCandidiat.toFixed(2)+' millions</p>'
         +'</div>'
       );
 
