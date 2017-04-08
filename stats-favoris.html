@@ -25,6 +25,16 @@
           <li><a href="favoris">Tweets favoris</a></li>
           <li><a href="influence">Influence à l'etranger</a></li>
         </ul>
+        <h2 style="color:white; text-align:center;">Récupération de tweets</h2>
+        <form style="margin-left:40px; width:160px; margin:auto;">
+          <label style="color:white;">Mot clé :</br></label>
+          <input style="width :160px; height:25px;" type="text" id="keyword">
+          <label style="color:white;"></br></br>Nombre de tweets :</br></label>
+          <input style="width :160px; height:25px;" type="text" id="nbTweetsVoulu">
+          <label style="color:white;"></br></br>Collection :</br></label>
+          <input style="width :160px; height:25px;" type="text" id="collection">
+          <div id="ajout-new-tweet" style="margin-top:20px;width:160px;line-height:40px; text-align:center; cursor:pointer; height:40px; background-color:#367fa9; color:white;">Ajout</div>
+        </form>
       </div>
 
       <div class="centre">
@@ -124,6 +134,30 @@
        complete : function(resultat, statut){
        }
     });
+
+    $('#ajout-new-tweet').click(function() {
+    //alert($('#nbTweets').val());
+    var keywordG = $('#keyword').val();
+    var nbTweetG = $('#nbTweetsVoulu').val();
+    var collectionG = $('#collection').val();
+
+    $.ajax({
+
+       url : '/api/twitter/recuperation/auto/'+keywordG+'/'+nbTweetG+'/'+collectionG,
+       type : 'GET',
+       dataType : 'json',
+       success : function(json, statut){
+         setTimeout(function(){
+           window.location.reload();
+        }, 1000);
+       },
+       error : function(resultat, statut, erreur){
+       },
+       complete : function(resultat, statut){
+       }
+    });
+
+  });
 
 
         //FIN AJAX
